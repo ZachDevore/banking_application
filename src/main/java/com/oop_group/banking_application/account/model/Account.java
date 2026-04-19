@@ -13,6 +13,7 @@ public abstract class Account {
     /**The id of the customer */
     private String customerId;
 
+
     /**
      * Constructor for Account
      * @param balance of the account
