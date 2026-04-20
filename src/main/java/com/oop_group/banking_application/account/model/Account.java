@@ -73,4 +73,7 @@ public abstract class Account {
     /**@return a String representation of the account type */
     public abstract String getAccountType();
 
+    /**@return the interest earned through the account */
+    public abstract double calculateInterest();
+
 }

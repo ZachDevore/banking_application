@@ -63,4 +63,11 @@ public class CheckingAccount extends Account {
     /**@return the type of account */
     @Override
     public String getAccountType() {return "Checking";}
+
+    /**
+     * Calculates the interest earned
+     * @return the interest earned on the account
+     */
+    @Override
+    public double calculateInterest() {return this.getBalance() * interestRate;}
 }

@@ -21,9 +21,9 @@ public class MoneyMarketAccount extends Account {
      */
     public MoneyMarketAccount(double balance, String customerId) {
         super(balance, customerId);
-        this.interestRate = .2; // 2% interest
+        this.interestRate = .02; // 2% interest
         this.minimumOpeningDeposit = 250; // $250 required to open the account
-        this.maxWithdrawalPerMonth = 1; // can only withdrawal once per month
+        this.maxWithdrawalPerMonth = 1; // can only withdraw once per month
         this.withdrawalsThisMonth = 0;
     }
 
@@ -71,4 +71,11 @@ public class MoneyMarketAccount extends Account {
     /**@return the type of account */
     @Override
     public String getAccountType() {return "Money Market";}
+
+    /**
+     * Calculate the interest earned
+     * @return the interest earned on the account
+     */
+    @Override
+    public double calculateInterest() {return this.getBalance() * interestRate;}
 }

@@ -2,9 +2,10 @@ package com.oop_group.banking_application.account.model;
 
 public class SavingsAccount extends Account {
 
-    /**The interest rate of a savings account */
+    /** The interest rate of a savings account */
     private double interestRate;
 
+    /** The minimum balance that must be kept in the account */
     private double minimumBalanceRequired;
 
     /**
@@ -36,10 +37,14 @@ public class SavingsAccount extends Account {
      */
     public void setMinimumBalanceRequired(double minimumBalanceRequired) {this.minimumBalanceRequired = minimumBalanceRequired;}
 
-    /**Apply the interest to the account */
-    public void applyInterest() {
-        deposit(getBalance() * interestRate); // current balance * interestRate
-    }
+    /**
+     * calculate the interest to the account
+     *
+     * @return the interest rate calulated
+     */
+    @Override
+    public double calculateInterest() {return this.getBalance() * interestRate;}
+
 
     /**@return the type of account */
     @Override
