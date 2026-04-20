@@ -40,9 +40,6 @@ public abstract class Account {
      * @throws IllegalArgumentException if the amount to be deposited is less than 0
      */
     public void deposit(double amount) throws IllegalArgumentException {
-        if (amount <= 0) { // deposit amount less than $0
-            throw new IllegalArgumentException("Deposit must be greater that $0");
-        }
         balance += amount;
     }
 
@@ -52,12 +49,6 @@ public abstract class Account {
      * @throws IllegalArgumentException if not enough money in the account
      */
     public void withdraw(double amount) throws IllegalArgumentException {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Withdrawal amount must be greater than $0");
-        }
-        if (!canWithdraw(amount)) {
-            throw new IllegalArgumentException("Insufficient funds");
-        }
         balance -= amount;
     }
 

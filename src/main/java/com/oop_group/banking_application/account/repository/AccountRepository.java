@@ -40,9 +40,6 @@ public class AccountRepository {
      * @throws IllegalArgumentException if the account is not found
      */
     public Account findByAccountNumber(String accountNumber) throws IllegalArgumentException {
-        if (!accountExist(accountNumber)) {
-            throw new IllegalArgumentException("The account is not found");
-        }
         return accounts.get(accountNumber);
     }
 
@@ -58,9 +55,7 @@ public class AccountRepository {
      * @throws IllegalArgumentException if the account cannot be found
      */
     public void updateAccount(Account account) throws IllegalArgumentException {
-        if (!accountExist(account.getAccountNumber())) {
-            throw new IllegalArgumentException("Account not found");
-        }
+
         accounts.put(account.getAccountNumber(), account);
     }
 
