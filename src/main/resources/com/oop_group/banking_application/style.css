@@ -1,31 +1,61 @@
-/* style.css */
-
-/* Style the main background */
+/* --- Global Styles --- */
 .root {
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: #F8FAFC;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
-/* Style the sidebar */
+/* --- Sidebar Styling --- */
 #navSidebar {
-    -fx-background-color: #2c3e50;
+    -fx-background-color: #1E293B; /* Deep Navy */
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
+/* Sidebar Buttons (Transparent style) */
+#navSidebar .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+    -fx-alignment: CENTER_LEFT;
+}
+
+#navSidebar .button:hover {
+    -fx-background-color: #334155;
+    -fx-text-fill: white;
+}
+
+/* Special Logout Button styling */
+.logout-button {
+    -fx-text-fill: #FCA5A5 !important; /* Force light red color */
+}
+
+/* --- Center Dashboard (The Card) --- */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);
+    -fx-padding: 30;
+}
+
+#balanceLabel {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #059669; /* Success Green */
+}
+
+/* --- Footer Area --- */
+#actionFooter {
+    -fx-background-color: #F1F5F9;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1 0 0 0;
     -fx-padding: 15;
 }
 
-/* Style all buttons */
-.button {
-    -fx-background-color: #3498db;
+.action-button {
+    -fx-background-color: #2563EB; /* Cobalt Blue */
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-padding: 8 15;
     -fx-background-radius: 5;
-}
-
-.button:hover {
-    -fx-background-color: #2980b9;
-    -fx-cursor: hand;
-}
-
-/* Style the balance label to stand out */
-#balanceLabel {
-    -fx-font-size: 24px;
-    -fx-text-fill: #27ae60;
 }

@@ -5,33 +5,33 @@ import com.oop_group.banking_application.account.model.CheckingAccount;
 import com.oop_group.banking_application.account.model.MoneyMarketAccount;
 import com.oop_group.banking_application.account.model.SavingsAccount;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Objects;
 
 public class HelloController {
 
-    // These fx:ids must match Scene Builder EXACTLY
-    @FXML private Label typeLabel;      // The header "Account Overview"
-    @FXML private Label accNumLabel;    // Label next to Account Number
-    @FXML private Label balanceLabel;   // Label next to Available Balance
-    @FXML private Label statusLabel;    // Empty label in the bottom HBox
-    @FXML private TextField amountInput; // TextField in the bottom HBox
+    @FXML private Label typeLabel;
+    @FXML private Label accNumLabel;
+    @FXML private Label balanceLabel;
+    @FXML private Label statusLabel;
+    @FXML private TextField amountInput;
+    @FXML private ListView<String> transactionListView;
 
-    // The active account being viewed
     private Account currentAccount;
 
-    /**
-     * Runs automatically when the FXML is loaded.
-     * Sets the default view to a Savings Account.
-     */
     @FXML
     public void initialize() {
-        // Initial mock data for testing
+        // Start with a default account
         currentAccount = new SavingsAccount(1000.00, "CUST-123");
         updateUI("Welcome to Bank of The Future");
     }
-
-    // --- Sidebar Navigation Methods ---
 
     @FXML
     protected void handleCheckingBtn() {
@@ -51,15 +51,13 @@ public class HelloController {
         updateUI("Switched to Money Market");
     }
 
-    // --- Transaction Methods ---
-
     @FXML
     protected void handleDeposit() {
         try {
             double amount = Double.parseDouble(amountInput.getText());
             currentAccount.deposit(amount);
             updateUI("Deposit successful!");
-            statusLabel.setStyle("-fx-text-fill: green;");
+            statusLabel.setStyle("-fx-text-fill: #059669;"); // Professional Green
         } catch (NumberFormatException e) {
             showError("Please enter a valid numeric amount.");
         } catch (IllegalArgumentException e) {
@@ -73,16 +71,28 @@ public class HelloController {
             double amount = Double.parseDouble(amountInput.getText());
             currentAccount.withdraw(amount);
             updateUI("Withdrawal successful!");
-            statusLabel.setStyle("-fx-text-fill: green;");
+            statusLabel.setStyle("-fx-text-fill: #059669;");
         } catch (NumberFormatException e) {
             showError("Please enter a valid numeric amount.");
         } catch (IllegalArgumentException e) {
-            // This catches your "Insufficient Funds" or "Negative Amount" errors
             showError(e.getMessage());
         }
     }
 
-    // --- UI Helper Methods ---
+    @FXML
+    private void handleLogout() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 400, 500);
+
+        // accesses 'style.css'
+        String cssPath = Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm();
+        scene.getStylesheets().add(cssPath);
+
+        // FIXED: Using typeLabel to get the window
+        Stage stage = (Stage) typeLabel.getScene().getWindow();
+        stage.setScene(scene);
+        stage.centerOnScreen();
+    }
 
     private void updateUI(String message) {
         if (currentAccount != null) {
@@ -91,11 +101,16 @@ public class HelloController {
             balanceLabel.setText(String.format("$%.2f", currentAccount.getBalance()));
             statusLabel.setText(message);
             amountInput.clear();
+
+            if (transactionListView != null) {
+                transactionListView.getItems().clear();
+                transactionListView.getItems().addAll(currentAccount.getTransactionHistory());
+            }
         }
     }
 
     private void showError(String message) {
         statusLabel.setText(message);
-        statusLabel.setStyle("-fx-text-fill: red;");
+        statusLabel.setStyle("-fx-text-fill: #DC2626;"); // Professional Red
     }
 }

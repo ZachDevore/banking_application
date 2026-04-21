@@ -1,5 +1,7 @@
 package com.oop_group.banking_application.account.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public abstract class Account {
@@ -12,6 +14,9 @@ public abstract class Account {
 
     /**The id of the customer */
     private String customerId;
+
+    /**Adds the transaction history for the account*/
+    protected List<String> transactionHistory = new ArrayList<>();
 
 
     /**
@@ -34,6 +39,11 @@ public abstract class Account {
     /**@return the customerId */
     public String customerId() {return this.customerId;}
 
+    /**@return the list of transaction strings*/
+    public List<String> getTransactionHistory() {
+        return this.transactionHistory;
+    }
+
     /**
      * deposit money into the account
      * @param amount to be deposited
@@ -41,6 +51,8 @@ public abstract class Account {
      */
     public void deposit(double amount) throws IllegalArgumentException {
         balance += amount;
+        String record = String.format("Deposit: +$%.2f",amount);
+        transactionHistory.add(record);
     }
 
     /**
