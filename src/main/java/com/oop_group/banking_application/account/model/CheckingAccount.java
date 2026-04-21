@@ -21,6 +21,8 @@ public class CheckingAccount extends Account {
         this.overDraftLimit = 100; // allowed to overdraft an account by $100
         this.overDraftFee = 15; // $15 penalty for overdrafting an account
         this.interestRate = 0.01; // 1% APY interest for checking accounts
+        //hardcoded initial history
+        transactionHistory.add("Purchase: Starbucks -$5.50");
     }
 
     /**@return the interest rate for a checking account */

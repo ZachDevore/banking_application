@@ -51,6 +51,7 @@ public abstract class Account {
      */
     public void deposit(double amount) throws IllegalArgumentException {
         balance += amount;
+        //adds to the transaction history when a deposit is made
         String record = String.format("Deposit: +$%.2f",amount);
         transactionHistory.add(record);
     }
@@ -62,6 +63,9 @@ public abstract class Account {
      */
     public void withdraw(double amount) throws IllegalArgumentException {
         balance -= amount;
+        //adds to the transaction history when a withdrawal is made
+        String record = String.format("Withdrawal: -$%.2f", amount);
+        transactionHistory.add(record);
     }
 
     /**
