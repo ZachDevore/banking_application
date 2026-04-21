@@ -17,6 +17,7 @@ import java.util.Objects;
 
 public class HelloController {
 
+    @FXML private Label headerLabel;
     @FXML private Label typeLabel;
     @FXML private Label accNumLabel;
     @FXML private Label balanceLabel;
@@ -81,15 +82,17 @@ public class HelloController {
 
     @FXML
     private void handleLogout() throws IOException {
+        // 1. Get the current stage using the headerLabel we just defined
+        Stage stage = (Stage) headerLabel.getScene().getWindow();
+
+        //Load the login FXML
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 400, 500);
 
-        // accesses 'style.css'
-        String cssPath = Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm();
-        scene.getStylesheets().add(cssPath);
+        //Apply the CSS (Check if your file is 'style.css' or 'styles.css')
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
-        // FIXED: Using typeLabel to get the window
-        Stage stage = (Stage) typeLabel.getScene().getWindow();
+        //Set the new scene and center
         stage.setScene(scene);
         stage.centerOnScreen();
     }
