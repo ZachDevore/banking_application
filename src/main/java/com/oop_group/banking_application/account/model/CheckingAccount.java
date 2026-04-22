@@ -23,6 +23,12 @@ public class CheckingAccount extends Account {
         this.interestRate = 0.01; // 1% APY interest for checking accounts
         //hardcoded initial history
         transactionHistory.add("Purchase: Starbucks -$5.50");
+        transactionHistory.add("Purchase: Target -$96.08");
+        transactionHistory.add("Purchase: Trader Joe's -$33.37");
+        transactionHistory.add("Purchase: Uber -$17.38");
+        transactionHistory.add("Purchase: Taco Bell -$11.12");
+        transactionHistory.add("Purchase: Mortgage -$808.56");
+        transactionHistory.add("Purchase: Apple -$1709.57");
     }
 
     /**@return the interest rate for a checking account */
