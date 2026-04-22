@@ -8,7 +8,7 @@ import java.util.List;
 public class AccountService {
 
     /** "Database" that our accounts will be stored in */
-    public AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
     /** Constructor */
     public AccountService() {
@@ -44,7 +44,11 @@ public class AccountService {
      * Retrieves all of the accounts
      * @return a list of type Account with all of the accounts
      */
-    public List<Account> getAllAccounts() {return accountRepository.findAllAccounts();}
+    public List<Account> getAllAccounts() throws IllegalStateException{
+        if (accountRepository.findAllAccounts().isEmpty()) {
+            throw new IllegalStateException("There are no accounts");
+        }
+        return accountRepository.findAllAccounts();}
 
     /**
      * Deposit money into the account
