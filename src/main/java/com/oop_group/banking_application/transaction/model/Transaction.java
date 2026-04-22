@@ -2,6 +2,7 @@ package com.oop_group.banking_application.transaction.model;
 
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Transaction {
 
@@ -14,6 +15,9 @@ public class Transaction {
     /** The Account ID of the account that did the transaction*/
     private String accountId;
 
+    /** Id of the transaction*/
+    private String transactionId;
+
     /** The amount of the transaction*/
     private double amount;
 
@@ -25,6 +29,7 @@ public class Transaction {
      */
     public Transaction(String customerId, String accountId, double amount) {
         this.dateTime = LocalDateTime.now();
+        this.transactionId = UUID.randomUUID().toString();
         this.customerId = customerId;
         this.accountId = accountId;
         this.amount = amount;
@@ -37,6 +42,12 @@ public class Transaction {
     public LocalDateTime getDateTime() {
         return this.dateTime;
     }
+
+    /**
+     * Getter for the transaction ID
+     * @return the transaction ID
+     */
+    public String getTransactionId() {return this.transactionId;}
 
     /**
      * Getter for the Customer ID
@@ -61,6 +72,12 @@ public class Transaction {
     public double getAmount() {
         return this.amount;
     }
+
+    /**
+     * Setter for the transaction ID
+     * @param transactionId to be set
+     */
+    public void setTransactionId(String transactionId) {this.transactionId = transactionId;}
 
     /**
      * Set a new date and time
