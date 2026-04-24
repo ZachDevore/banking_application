@@ -17,10 +17,10 @@ public class SavingsAccount extends Account {
         super(balance, customerId);
         this.interestRate = .025;
         this.minimumBalanceRequired = 25; // must have at least $25 in a savings account
-        transactionHistory.add("Deposit: $250.00");
-        transactionHistory.add("Deposit: $250.00");
-        transactionHistory.add("Deposit: $250.00");
-        transactionHistory.add("Deposit: $250.00");
+        transactionHistory.add("Deposit: $250.00            04-22-26                 ");
+        transactionHistory.add("Deposit: $250.00            03-22-26                 ");
+        transactionHistory.add("Deposit: $250.00            02-22-26                 ");
+        transactionHistory.add("Deposit: $250.00            01-22-26                 ");
     }
 
     /**@return the interest rate */
