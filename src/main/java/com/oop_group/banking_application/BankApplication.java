@@ -1,5 +1,8 @@
 package com.oop_group.banking_application;
 
+import com.oop_group.banking_application.account.service.AccountService;
+import com.oop_group.banking_application.customer.service.CustomerService;
+import com.oop_group.banking_application.transaction.service.TransactionService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,6 +33,13 @@ public class BankApplication extends Application {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void init() {
+        AccountService accounts = new AccountService();
+        CustomerService customers = new CustomerService();
+        TransactionService transactions = new TransactionService();
     }
 
     public static void main(String[] args) {
