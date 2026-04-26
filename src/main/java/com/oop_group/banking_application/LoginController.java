@@ -1,3 +1,15 @@
+/**
+ * The LoginController class manages the user interface for the login and
+ * registration screens. It serves as the gateway to the main application.
+ * * Key Responsibilities:
+ * - Handles event-driven actions from 'login-view.fxml' such as button clicks.
+ * - Communicates with the CustomerRepository to verify user credentials
+ * during the login process.
+ * - Manages the transition between the Login view and the Dashboard view,
+ * ensuring the specific Customer object is passed to the next scene
+ * to maintain user session context.
+ */
+
 package com.oop_group.banking_application;
 
 import com.oop_group.banking_application.customer.model.Customer;

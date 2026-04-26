@@ -1,3 +1,15 @@
+/**
+ * The BankApplication class serves as the main entry point for the JavaFX application.
+ * It is responsible for initializing the primary stage (the window) and setting up
+ * the global data environment.
+ * * Key Responsibilities:
+ * - Extends the JavaFX Application class to launch the GUI lifecycle.
+ * - Maintains a static 'CustomerRepository' which acts as a persistent database
+ * for the duration of the application's runtime.
+ * - Implements the init() method to pre-load the system with a test administrative
+ * user for development and grading purposes.
+ */
+
 package com.oop_group.banking_application;
 
 import com.oop_group.banking_application.customer.repository.CustomerRepository;
