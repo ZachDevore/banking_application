@@ -1,119 +1,94 @@
 package com.oop_group.banking_application;
 
-import com.oop_group.banking_application.account.model.Account;
-import com.oop_group.banking_application.account.model.CheckingAccount;
-import com.oop_group.banking_application.account.model.MoneyMarketAccount;
-import com.oop_group.banking_application.account.model.SavingsAccount;
+import com.oop_group.banking_application.customer.model.Customer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.util.Objects;
 
 public class HelloController {
 
-    @FXML private Label headerLabel;
-    @FXML private Label typeLabel;
-    @FXML private Label accNumLabel;
-    @FXML private Label balanceLabel;
-    @FXML private Label statusLabel;
+    @FXML private Label headerLabel, accNumLabel, balanceLabel, typeLabel, statusLabel;
     @FXML private TextField amountInput;
-    @FXML private ListView<String> transactionListView;
 
-    private Account currentAccount;
+    // State Variables: Tracking separate balances for different accounts
+    private double checkingBal = 500.00;
+    private double savingsBal = 1200.50;
+    private double moneyMarketBal = 5000.00;
+    private String activeAccount = "Checking";
 
-    @FXML
-    public void initialize() {
-        // Start with a default account
-        currentAccount = new SavingsAccount(1000.00, "CUST-123");
-        updateUI("Welcome to Bank of The Future");
-    }
-
-    @FXML
-    protected void handleCheckingBtn() {
-        currentAccount = new CheckingAccount(500.00, "CUST-123");
-        updateUI("Switched to Checking");
-    }
-
-    @FXML
-    protected void handleSavingsBtn() {
-        currentAccount = new SavingsAccount(1000.00, "CUST-123");
-        updateUI("Switched to Savings");
-    }
-
-    @FXML
-    protected void handleMoneyMarketBtn() {
-        currentAccount = new MoneyMarketAccount(5000.00, "CUST-123");
-        updateUI("Switched to Money Market");
-    }
-
-    @FXML
-    protected void handleDeposit() {
-        try {
-            double amount = Double.parseDouble(amountInput.getText());
-            currentAccount.deposit(amount);
-            updateUI("Deposit successful!");
-            statusLabel.setStyle("-fx-text-fill: #059669;"); // Professional Green
-        } catch (NumberFormatException e) {
-            showError("Please enter a valid numeric amount.");
-        } catch (IllegalArgumentException e) {
-            showError(e.getMessage());
+    /** Sets up initial dashboard view */
+    public void initUserData(Customer customer) {
+        if (customer != null) {
+            if (accNumLabel != null) accNumLabel.setText(customer.getCustomerId());
+            updateUI();
         }
     }
 
+    /** Updates labels based on the current active account and its balance */
+    private void updateUI() {
+        double currentAmt = switch (activeAccount) {
+            case "Savings" -> savingsBal;
+            case "Money Market" -> moneyMarketBal;
+            default -> checkingBal;
+        };
+
+        if (balanceLabel != null) balanceLabel.setText(String.format("$%.2f", currentAmt));
+        if (typeLabel != null) typeLabel.setText(activeAccount + " Overview");
+    }
+
     @FXML
-    protected void handleWithdraw() {
+    private void handleDeposit() {
         try {
-            double amount = Double.parseDouble(amountInput.getText());
-            currentAccount.withdraw(amount);
-            updateUI("Withdrawal successful!");
-            statusLabel.setStyle("-fx-text-fill: #059669;");
-        } catch (NumberFormatException e) {
-            showError("Please enter a valid numeric amount.");
-        } catch (IllegalArgumentException e) {
-            showError(e.getMessage());
-        }
-    }
+            double amt = Double.parseDouble(amountInput.getText());
+            if (amt <= 0) throw new Exception();
 
-    @FXML
-    private void handleLogout() throws IOException {
-        // 1. Get the current stage using the headerLabel we just defined
-        Stage stage = (Stage) headerLabel.getScene().getWindow();
+            // Logic to add to the specific active balance
+            if (activeAccount.equals("Checking")) checkingBal += amt;
+            else if (activeAccount.equals("Savings")) savingsBal += amt;
+            else moneyMarketBal += amt;
 
-        //Load the login FXML
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 500);
-
-        //Apply the CSS (Check if your file is 'style.css' or 'styles.css')
-        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-
-        //Set the new scene and center
-        stage.setScene(scene);
-        stage.centerOnScreen();
-    }
-
-    private void updateUI(String message) {
-        if (currentAccount != null) {
-            typeLabel.setText(currentAccount.getAccountType());
-            accNumLabel.setText(currentAccount.getAccountNumber());
-            balanceLabel.setText(String.format("$%.2f", currentAccount.getBalance()));
-            statusLabel.setText(message);
+            statusLabel.setText("Deposited $" + String.format("%.2f", amt));
+            updateUI();
             amountInput.clear();
-
-            if (transactionListView != null) {
-                transactionListView.getItems().clear();
-                transactionListView.getItems().addAll(currentAccount.getTransactionHistory());
-            }
-        }
+        } catch (Exception e) { statusLabel.setText("Error: Enter positive number."); }
     }
 
-    private void showError(String message) {
-        statusLabel.setText(message);
-        statusLabel.setStyle("-fx-text-fill: #DC2626;"); // Professional Red
+    @FXML
+    private void handleWithdraw() {
+        try {
+            double amt = Double.parseDouble(amountInput.getText());
+            double current = (activeAccount.equals("Checking")) ? checkingBal :
+                    (activeAccount.equals("Savings")) ? savingsBal : moneyMarketBal;
+
+            if (amt > 0 && amt <= current) {
+                if (activeAccount.equals("Checking")) checkingBal -= amt;
+                else if (activeAccount.equals("Savings")) savingsBal -= amt;
+                else moneyMarketBal -= amt;
+
+                statusLabel.setText("Withdrew $" + String.format("%.2f", amt));
+                updateUI();
+                amountInput.clear();
+            } else { statusLabel.setText("Insufficient funds or invalid amount."); }
+        } catch (Exception e) { statusLabel.setText("Error: Enter positive number."); }
+    }
+
+    // Account Switching Logic
+    @FXML private void handleCheckingBtn() { activeAccount = "Checking"; updateUI(); }
+    @FXML private void handleSavingsBtn() { activeAccount = "Savings"; updateUI(); }
+    @FXML private void handleMoneyMarketBtn() { activeAccount = "Money Market"; updateUI(); }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            Stage stage = (Stage) headerLabel.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+            Parent root = loader.load();
+            stage.setScene(new Scene(root, 400, 550));
+            stage.centerOnScreen();
+        } catch (IOException e) { e.printStackTrace(); }
     }
 }

@@ -1,48 +1,40 @@
 package com.oop_group.banking_application;
 
-import com.oop_group.banking_application.account.service.AccountService;
-import com.oop_group.banking_application.customer.service.CustomerService;
-import com.oop_group.banking_application.transaction.service.TransactionService;
+import com.oop_group.banking_application.customer.repository.CustomerRepository;
+import com.oop_group.banking_application.customer.model.Customer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.Objects;
-
 public class BankApplication extends Application {
+
+    // Static repository to keep user data alive during the session
+    private static final CustomerRepository repository = new CustomerRepository();
+
+    public static CustomerRepository getRepo() { return repository; }
+
     @Override
-    public void start(Stage stage) throws IOException {
-        // Load the Login page first instead of the dashboard
-        FXMLLoader fxmlLoader = new FXMLLoader(BankApplication.class.getResource("login-view.fxml"));
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+        // Standard login window size
+        Scene scene = new Scene(loader.load(), 400, 550);
 
-        // Set a professional starting size (Width, Height)
-        Scene scene = new Scene(fxmlLoader.load(), 400, 500);
+        if (getClass().getResource("style.css") != null) {
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        }
 
-        // Attach your professional stylesheet
-        // Use Objects.requireNonNull to catch "File Not Found" errors early
-        String css = Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm();
-        scene.getStylesheets().add(css);
-
-        stage.setTitle("Global Bank - Secure Access");
-
-        //Prevent the window from being resized too small
-        stage.setMinWidth(400);
-        stage.setMinHeight(500);
-
+        stage.setTitle("Bank of The Future - Secure Login");
         stage.setScene(scene);
         stage.show();
     }
 
     @Override
     public void init() {
-        AccountService accounts = new AccountService();
-        CustomerService customers = new CustomerService();
-        TransactionService transactions = new TransactionService();
+        // Pre-loaded user for testing (User: admin | Pass: password123)
+        Customer admin = new Customer("Wesley", "Thomas", "admin", "password123");
+        repository.saveCustomer(admin);
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
+    public static void main(String[] args) { launch(); }
 }

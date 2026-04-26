@@ -1,35 +1,67 @@
 package com.oop_group.banking_application;
 
+import com.oop_group.banking_application.customer.model.Customer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.control.*;
-import java.io.IOException;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class LoginController {
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
+    @FXML private TextField usernameField, firstNameField, lastNameField, signUpUsernameField;
+    @FXML private PasswordField passwordField, signUpPasswordField;
     @FXML private Label errorLabel;
+    @FXML private VBox loginBox, signUpBox;
 
     @FXML
-    private void handleLogin() throws IOException {
-        String user = usernameField.getText();
+    private void handleLogin() {
+        String user = usernameField.getText().trim();
         String pass = passwordField.getText();
 
-        // Simple hardcoded check for now
-        if (user.equals("admin") && pass.equals("password123")) {
-            switchToDashboard();
+        Customer found = null;
+        for (Customer c : BankApplication.getRepo().getAllCustomers()) {
+            if (c.getUsername().equalsIgnoreCase(user) && c.getPassword().equals(pass)) {
+                found = c;
+                break;
+            }
+        }
+
+        if (found != null) {
+            try {
+                switchToDashboard(found);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
-            errorLabel.setText("Invalid username or password.");
+            errorLabel.setText("Invalid credentials.");
         }
     }
 
-    private void switchToDashboard() throws IOException {
-        // This is the "Magic" that swaps the screens
-        Stage stage = (Stage) usernameField.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(BankApplication.class.getResource("hello-viewer.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-        stage.setScene(scene);
+    @FXML
+    private void handleRegister() {
+        Customer nc = new Customer(lastNameField.getText(), firstNameField.getText(),
+                signUpUsernameField.getText(), signUpPasswordField.getText());
+        BankApplication.getRepo().saveCustomer(nc);
+        handleShowLogin();
+        errorLabel.setText("Registration Successful!");
     }
+
+    private void switchToDashboard(Customer customer) throws Exception {
+        Stage stage = (Stage) usernameField.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-viewer.fxml"));
+        Parent root = loader.load();
+
+        HelloController controller = loader.getController();
+        if (controller != null) {
+            controller.initUserData(customer);
+        }
+
+        stage.setScene(new Scene(root, 800, 600));
+        stage.centerOnScreen();
+    }
+
+    @FXML private void handleShowSignUp() { loginBox.setVisible(false); loginBox.setManaged(false); signUpBox.setVisible(true); signUpBox.setManaged(true); }
+    @FXML private void handleShowLogin() { signUpBox.setVisible(false); signUpBox.setManaged(false); loginBox.setVisible(true); loginBox.setManaged(true); }
 }

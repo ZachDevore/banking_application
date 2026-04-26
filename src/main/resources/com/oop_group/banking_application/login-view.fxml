@@ -2,9 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -17,28 +19,35 @@
    </padding>
 
    <children>
-      <Label text="Secure Login" textFill="#1e293b">
+      <Label text="Bank of The Future" textFill="#1e293b">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
 
-      <VBox spacing="5.0">
+      <StackPane>
          <children>
-            <Label text="Username" />
-            <TextField fx:id="usernameField" promptText="Enter your username" />
-         </children>
-      </VBox>
+            <VBox fx:id="loginBox" spacing="15.0">
+               <children>
+                  <TextField fx:id="usernameField" promptText="Username" />
+                  <PasswordField fx:id="passwordField" promptText="Password" />
+                  <Button onAction="#handleLogin" prefWidth="Infinity" styleClass="action-button" text="Sign In" />
+                  <Hyperlink onAction="#handleShowSignUp" text="New user? Create Account" />
+               </children>
+            </VBox>
 
-      <VBox spacing="5.0">
-         <children>
-            <Label text="Password" />
-            <PasswordField fx:id="passwordField" promptText="Enter your password" />
+            <VBox fx:id="signUpBox" managed="false" spacing="15.0" visible="false">
+               <children>
+                  <TextField fx:id="firstNameField" promptText="First Name" />
+                  <TextField fx:id="lastNameField" promptText="Last Name" />
+                  <TextField fx:id="signUpUsernameField" promptText="Choose Username" />
+                  <PasswordField fx:id="signUpPasswordField" promptText="Choose Password" />
+                  <Button onAction="#handleRegister" prefWidth="Infinity" styleClass="action-button" text="Register" />
+                  <Hyperlink onAction="#handleShowLogin" text="Back to Sign In" />
+               </children>
+            </VBox>
          </children>
-      </VBox>
-
-      <Button mnemonicParsing="false" onAction="#handleLogin" prefWidth="Infinity"
-              styleClass="action-button" text="Sign In" />
+      </StackPane>
 
       <Label fx:id="errorLabel" textFill="RED" />
    </children>
